@@ -89,7 +89,7 @@ var amountToCall = function(handRank, game_state){
 
 
 module.exports = {
-    VERSION: "V1",
+    VERSION: "BE-AGRESSIVE",
 
     bet_request: function (game_state, bet) {
         playGame(game_state, bet);
