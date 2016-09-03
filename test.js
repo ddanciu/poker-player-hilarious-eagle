@@ -45,6 +45,7 @@ var game_state = {
 
 var player = require('./player');
 
-var hand = player.hand(game_state);
+var hand = player.bet_request(game_state, function (bet) {
 
-console.log(hand);
+    console.log(bet);    
+});
