@@ -21,21 +21,25 @@ var extractHandFromGame = function (game_state) {
 
 var playGame = function (game_state, bet) {
     var myHand = extractHandFromGame(game_state);
-    var request = http.get("http://rainman.leanpoker.org/rank?cards=" + JSON.stringify(myHand), function (response) {
-        var body = '';
-        response.on('data', function (d) {
-            body += d;
+    if(myHand.length >= 5) {
+        var request = http.get("http://rainman.leanpoker.org/rank?cards=" + JSON.stringify(myHand), function (response) {
+            var body = '';
+            response.on('data', function (d) {
+                body += d;
+            });
+            response.on('end', function () {
+                var data = JSON.parse(body);
+                console.log(body);
+                placeBet(data.rank, game_state, bet);
+            });
         });
-        response.on('end', function () {
-            var data = JSON.parse(body);
-            console.log(body);
-            placeBet(data.rank, game_state, bet);
+        request.on('error', function (err) {
+            console.log("an error occured ");
+            bet(0);
         });
-    });
-    request.on('error', function (err) {
-        console.log("an error occured ");
-        bet(0);
-    });
+    } else {
+        placeBet(1, game_state, bet);
+    }
 
 
 };
