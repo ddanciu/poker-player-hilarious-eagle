@@ -127,7 +127,7 @@ var intersect = function (base_cards, used) {
 
 
 module.exports = {
-    VERSION: "BE-AGRESSIVE",
+    VERSION: "JUST-IN-FOR-THE-GAME",
 
     bet_request: function (game_state, bet) {
         playGame(game_state, bet);
