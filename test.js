@@ -44,6 +44,12 @@ var game_state = {
 };
 
 var player = require('./player');
+var Hand = require('pokersolver').Hand;
+
+var hand = Hand.solve(['3d', '2s', '3s', '3c']);
+
+console.log(JSON.stringify(hand));
+console.log("rank: " + hand.rank + " description: " + hand.descr);
 
 var hand = player.bet_request(game_state, function (bet) {
 
