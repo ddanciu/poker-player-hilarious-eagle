@@ -102,7 +102,8 @@ var raise = function raise(handRank, firstValue, secondValue, game_state, bet) {
     console.log("decision to raise ");
     var amountToCall = game_state.current_buy_in - game_state.players[game_state.in_action].bet,
         minRaise = game_state.minimum_raise,
-        amountToRaise = Math.floor( (me.stack - amountToCall - minRaise) * ((handRank + 2) / 50));
+        randomPercentage = (Math.random() * (handRank + 2)/10),
+        amountToRaise = Math.floor( (me.stack - amountToCall - minRaise) * ((handRank + 2) / 100));
 
     if(amountToCall > 500 && handRank < 6) {
         bet(0);

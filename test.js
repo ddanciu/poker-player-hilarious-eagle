@@ -57,7 +57,8 @@ var game_state = {
 };
 
 var player = require('./player');
-
+var handRank = 8;
+console.log(Math.random() * (handRank + 2)/10);
 var hand = player.bet_request(game_state, function (bet) {
 
     console.log(bet);    
