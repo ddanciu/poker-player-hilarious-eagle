@@ -9,7 +9,7 @@
   "dependencies": {
     "express": "4.x",
     "body-parser": "1.15.2",
-    "poker-has": "^2.1.0",
+    "pokersolver": "^2.1.2",
     "underscore": "^1.8.3"
   }
 }
