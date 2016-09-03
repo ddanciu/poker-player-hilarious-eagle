@@ -89,9 +89,9 @@ var call = function (handRank, firstValue, secondValue, game_state, bet, isFirst
     console.log("Amount to call: " + amountToCall + " when my stack is " +  me.stack + " then the acceptable amount to call is " + (me.stack*0.2));
     if(handRank == 1 && firstValue < 8 && game_state.community_cards.length >= 3) {
         bet(0);
-    } else if(amountToCall > (me.stack*0.2) && isFirstHand ){
+    } else if(amountToCall > (me.stack*0.1) && isFirstHand ){
         bet(0);
-    } else if(amountToCall > (me.stack*0.4) && handRank < 4 ){
+    } else if(amountToCall > (me.stack*0.3) && handRank < 4 ){
         bet(0);
     } else {
         bet(amountToCall);
@@ -102,7 +102,7 @@ var raise = function raise(handRank, firstValue, secondValue, game_state, bet) {
     console.log("decision to raise ");
     var amountToCall = game_state.current_buy_in - game_state.players[game_state.in_action].bet,
         minRaise = game_state.minimum_raise,
-        amountToRaise = Math.floor( (me.stack - amountToCall - minRaise) * ((handRank + 2) / 10));
+        amountToRaise = Math.floor( (me.stack - amountToCall - minRaise) * ((handRank + 2) / 50));
 
     if(amountToCall > 500 && handRank < 6) {
         bet(0);
