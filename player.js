@@ -62,16 +62,28 @@ var placeBet = function (handRank, game_state, bet) {
 };
 
 var call = function (handRank, game_state, bet) {
-    return bet(game_state.current_buy_in - game_state.players[game_state.in_action].bet);
+    var amountToCall = game_state.current_buy_in - game_state.players[game_state.in_action].bet;
+    if(amountToCall > 500 && handRank < 6){
+        bet(0);
+    } else {
+        bet(amountToCall);
+    }
 };
 
 var raise = function raise(handRank, game_state, bet) {
-    console.log(" my stack: " + me.stack);
     var amountToCall = game_state.current_buy_in - game_state.players[game_state.in_action].bet,
         minRaise = game_state.minimum_raise,
         amountToRaise = Math.floor( (me.stack - amountToCall - minRaise) * ((handRank + 2) / 10));
-    console.log(" amountToRaise: " + amountToRaise);
-    return bet(amountToCall + minRaise + amountToRaise);
+    if(amountToCall > 500 && handRank < 6){
+        bet(0);
+    } else {
+        bet(amountToCall + minRaise + amountToRaise);
+    }
+
+};
+
+var amountToCall = function(handRank, game_state){
+
 };
 
 
