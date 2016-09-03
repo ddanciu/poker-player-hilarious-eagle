@@ -7,9 +7,8 @@
   },
   "private": true,
   "dependencies": {
-    "express": "4.x",
     "body-parser": "1.15.2",
-    "pokersolver": "^2.1.2",
+    "express": "4.x",
     "underscore": "^1.8.3"
   }
 }

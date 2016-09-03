@@ -35,7 +35,11 @@ var game_state = {
 	"big_blind": 4,
 	"orbits": 0,
 	"dealer": 0,
-	"community_cards": [],
+	"community_cards": [
+		{"rank":"J", "suit":"diamonds"},
+		{"rank":"5", "suit":"diamonds"},
+		{"rank":"6", "suit":"diamonds"}
+	],
 	"current_buy_in": 4,
 	"pot": 6,
 	"in_action": 1,
