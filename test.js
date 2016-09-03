@@ -36,9 +36,7 @@ var game_state = {
 	"orbits": 0,
 	"dealer": 0,
 	"community_cards": [
-		{"rank":"7", "suit":"clubs"},
-		{"rank":"5", "suit":"clubs"},
-		{"rank":"6", "suit":"clubs"}
+	
 	],
 	"current_buy_in": 4,
 	"pot": 6,

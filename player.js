@@ -32,7 +32,7 @@ var playGame = function (game_state, bet) {
             response.on('end', function () {
                 console.log(new Date().getTime() - t0);
                 var data = JSON.parse(body);
-                placeBet(data.rank, game_state, bet);
+                placeBet(data.rank, data.value, data.second_value, game_state, bet);
             });
         });
         request.on('error', function (err) {
@@ -40,40 +40,61 @@ var playGame = function (game_state, bet) {
             bet(0);
         });
     } else {
-        if( myHand[0].rank === myHand[1].rank){
-            raise(4, game_state, bet);
+        if( myHand[0].rank === myHand[1].rank || handIs(myHand, 'A', 'K')){
+            raise(4, myHand[0].rank, myHand[1].rank, game_state, bet);
+        } if (handHas(myHand, 'A')){
+            raise(2, myHand[0].rank, myHand[1].rank, game_state, bet);
         } else {
-            placeBet(1, game_state, bet);
+            placeBet(1, myHand[0].rank, myHand[1].rank, game_state, bet);
         }
 
     }
-
-
 };
 
-var placeBet = function (handRank, game_state, bet) {
-    if (handRank == 0 ) {
-        bet(0);
-    } else if (handRank >= 1 && handRank <= 4) {
-        call(handRank, game_state, bet);
+var handHas = function(hand, rank){
+  return hand[0].rank == rank || hand[1].rank == rank;
+};
+
+var handIs = function (hand, rank1, rank2){
+    if(hand[0].rank == rank1 && hand[1].rank == rank2){
+        return true;
+    } else if(hand[0].rank == rank2 && hand[1].rank == rank1){
+        return true;
     } else {
-        raise(handRank, game_state, bet);
+        return false;
     }
 };
 
-var call = function (handRank, game_state, bet) {
+
+var placeBet = function (handRank, firstValue, secondValue, game_state, bet) {
+    if (handRank == 0 ) {
+        bet(0);
+    } else if (handRank >= 1 && handRank <= 4) {
+        call(handRank, firstValue, secondValue, game_state, bet);
+    } else {
+        raise(handRank, firstValue, secondValue, game_state, bet);
+    }
+};
+
+var call = function (handRank, firstValue, secondValue, game_state, bet) {
+    console.log("decision to call for hand " + handRank + " with first value " + firstValue + " and second " + secondValue);
     var amountToCall = game_state.current_buy_in - game_state.players[game_state.in_action].bet;
-    if(amountToCall > 500 && handRank < 6){
+
+    if(handRank == 1 && firstValue < 8 && game_state.community_cards.length > 3) {
+        bet(0);
+    } else if(amountToCall > 500 && handRank < 6){
         bet(0);
     } else {
         bet(amountToCall);
     }
 };
 
-var raise = function raise(handRank, game_state, bet) {
+var raise = function raise(handRank, firstValue, secondValue, game_state, bet) {
+    console.log("decision to raise ");
     var amountToCall = game_state.current_buy_in - game_state.players[game_state.in_action].bet,
         minRaise = game_state.minimum_raise,
         amountToRaise = Math.floor( (me.stack - amountToCall - minRaise) * ((handRank + 2) / 10));
+
     if(amountToCall > 500 && handRank < 6){
         bet(0);
     } else {
@@ -81,11 +102,6 @@ var raise = function raise(handRank, game_state, bet) {
     }
 
 };
-
-var amountToCall = function(handRank, game_state){
-
-};
-
 
 
 module.exports = {
