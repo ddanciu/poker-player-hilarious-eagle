@@ -1,7 +1,8 @@
 var http = require('http'),
     _ = require('underscore');
 
-var ourTeamId = 1, me = undefined;;
+var ourTeamId = 1, me = undefined,
+    intRank = {"2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7, "8":8, "9": 9, "10": 10, "J": 11, "Q": 12, "K": 13, "A":14};
 
 var extractHandFromGame = function (game_state) {
     var hand = [],
@@ -32,7 +33,13 @@ var playGame = function (game_state, bet) {
             response.on('end', function () {
                 console.log(new Date().getTime() - t0);
                 var data = JSON.parse(body);
-                placeBet(data.rank, data.value, data.second_value, game_state, bet);
+                if(intersect(game_state.community_cards, [data.value, data.second_value]) >= 1 &&
+                    intersect(me.hole_cards, [data.value, data.second_value]) == 0) {
+                    bet(0);
+                } else {
+                    placeBet(data.rank, data.value, data.second_value, game_state, bet);
+                }
+
             });
         });
         request.on('error', function (err) {
@@ -40,10 +47,12 @@ var playGame = function (game_state, bet) {
             bet(0);
         });
     } else {
-        if( myHand[0].rank === myHand[1].rank || handIs(myHand, 'A', 'K')){
-            raise(4, myHand[0].rank, myHand[1].rank, game_state, bet);
+        var firstValue = _.max([intRank[myHand[0].rank], intRank[myHand[1].rank]]),
+            secondValue = _.min([intRank[myHand[0].rank], intRank[myHand[1].rank]]);
+        if( firstValue === secondValue || handIs(myHand, 'A', 'K')){
+            raise(4, firstValue, secondValue, game_state, bet);
         } else {
-            placeBet(1, myHand[0].rank, myHand[1].rank, game_state, bet);
+            call(1, firstValue, secondValue, game_state, bet, true);
         }
 
     }
@@ -74,13 +83,15 @@ var placeBet = function (handRank, firstValue, secondValue, game_state, bet) {
     }
 };
 
-var call = function (handRank, firstValue, secondValue, game_state, bet) {
+var call = function (handRank, firstValue, secondValue, game_state, bet, isFirstHand) {
     console.log("decision to call for hand " + handRank + " with first value " + firstValue + " and second " + secondValue);
     var amountToCall = game_state.current_buy_in - game_state.players[game_state.in_action].bet;
-
+    console.log("Amount to call: " + amountToCall + " when my stack is " +  me.stack + " then the acceptable amount to call is " + (me.stack*0.2));
     if(handRank == 1 && firstValue < 8 && game_state.community_cards.length >= 3) {
         bet(0);
-    } else if(amountToCall > 500 && handRank < 6){
+    } else if(amountToCall > (me.stack*0.2) && isFirstHand ){
+        bet(0);
+    } else if(amountToCall > (me.stack*0.4) && handRank < 4 ){
         bet(0);
     } else {
         bet(amountToCall);
@@ -93,12 +104,25 @@ var raise = function raise(handRank, firstValue, secondValue, game_state, bet) {
         minRaise = game_state.minimum_raise,
         amountToRaise = Math.floor( (me.stack - amountToCall - minRaise) * ((handRank + 2) / 10));
 
-    if(amountToCall > 500 && handRank < 6){
+    if(amountToCall > 500 && handRank < 6) {
         bet(0);
     } else {
         bet(amountToCall + minRaise + amountToRaise);
     }
 
+};
+
+var intersect = function (base_cards, used) {
+    var base = [];
+    _.forEach(base_cards, function (card) {
+        base.push(intRank[card.rank]);
+    });
+    //console.log("Base:" + base);
+    //console.log("Used:" + used);
+    //console.log(base[0] === used[0]);
+    var inter = _.intersection(_.uniq(base), _.uniq(used));
+    //console.log("intersection:" + inter);
+    return inter.length;
 };
 
 

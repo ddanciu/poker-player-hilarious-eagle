@@ -36,7 +36,18 @@ var game_state = {
 	"orbits": 0,
 	"dealer": 0,
 	"community_cards": [
-	
+		{
+			"rank": "9",
+			"suit": "diamonds"
+		},
+		{
+			"rank": "9",
+			"suit": "diamonds"
+		},
+		{
+			"rank": "10",
+			"suit": "diamonds"
+		}
 	],
 	"current_buy_in": 4,
 	"pot": 6,
