@@ -41,9 +41,9 @@ var playGame = function (game_state, bet) {
 };
 
 var placeBet = function (handRank, game_state, bet) {
-    if (handRank == 0 || handRank == 1) {
+    if (handRank == 0 ) {
         bet(0);
-    } else if (handRank >= 2 && handRank <= 5) {
+    } else if (handRank >= 1 && handRank <= 5) {
         call(game_state, bet);
     } else {
         raise(game_state, bet);
