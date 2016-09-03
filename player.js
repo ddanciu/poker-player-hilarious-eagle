@@ -42,8 +42,6 @@ var playGame = function (game_state, bet) {
     } else {
         if( myHand[0].rank === myHand[1].rank || handIs(myHand, 'A', 'K')){
             raise(4, myHand[0].rank, myHand[1].rank, game_state, bet);
-        } if (handHas(myHand, 'A')){
-            raise(2, myHand[0].rank, myHand[1].rank, game_state, bet);
         } else {
             placeBet(1, myHand[0].rank, myHand[1].rank, game_state, bet);
         }
