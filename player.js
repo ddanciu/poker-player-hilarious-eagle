@@ -78,7 +78,7 @@ var call = function (handRank, firstValue, secondValue, game_state, bet) {
     console.log("decision to call for hand " + handRank + " with first value " + firstValue + " and second " + secondValue);
     var amountToCall = game_state.current_buy_in - game_state.players[game_state.in_action].bet;
 
-    if(handRank == 1 && firstValue < 8 && game_state.community_cards.length > 3) {
+    if(handRank == 1 && firstValue < 8 && game_state.community_cards.length >= 3) {
         bet(0);
     } else if(amountToCall > 500 && handRank < 6){
         bet(0);
