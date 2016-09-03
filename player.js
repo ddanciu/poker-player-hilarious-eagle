@@ -8,8 +8,7 @@ module.exports = {
       
     if(game_state)
         console.log(JSON.stringify(game_state));  
-      
-      for (var player in game_state.players)
+
       
       
     bet(200);
