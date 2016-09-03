@@ -6,8 +6,8 @@ module.exports = {
   bet_request: function(game_state, bet) {
       
       
-      
-    console.out(game_state.players);  
+    if(game_state)
+        console.out(game_state.players);  
       
       
     bet(200);
