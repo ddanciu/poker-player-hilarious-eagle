@@ -7,11 +7,13 @@ module.exports = {
       
       
     if(game_state)
-        console.out(game_state.players);  
+        console.out(JSON.stringify(game_state.players));  
       
       
     bet(200);
   },
+    
+    
 
   showdown: function(game_state) {
 
