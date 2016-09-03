@@ -18,7 +18,7 @@ var game_state = {
 			"rank": "4",
 			"suit": "clubs"
 		}, {
-			"rank": "Q",
+			"rank": "5",
 			"suit": "clubs"
 		}],
 		"version": "Default JavaScript folding player",
@@ -36,9 +36,9 @@ var game_state = {
 	"orbits": 0,
 	"dealer": 0,
 	"community_cards": [
-		{"rank":"J", "suit":"diamonds"},
-		{"rank":"5", "suit":"diamonds"},
-		{"rank":"6", "suit":"diamonds"}
+		{"rank":"7", "suit":"clubs"},
+		{"rank":"5", "suit":"clubs"},
+		{"rank":"6", "suit":"clubs"}
 	],
 	"current_buy_in": 4,
 	"pot": 6,

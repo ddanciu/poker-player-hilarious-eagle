@@ -1,15 +1,16 @@
 var http = require('http'),
     _ = require('underscore');
 
-var ourTeamId = 1;
+var ourTeamId = 1, me = undefined;;
 
 var extractHandFromGame = function (game_state) {
     var hand = [],
-        me = game_state.players.filter(function (player) {
-            if (player.id == ourTeamId) return player;
-        }),
         publicCards = game_state.community_cards;
-    _.forEach(me[0].hole_cards, function (card) {
+    me = game_state.players.filter(function (player) {
+        if (player.id == ourTeamId) return player;
+    })[0];
+
+    _.forEach(me.hole_cards, function (card) {
         hand.push(card);
     });
     _.forEach(publicCards, function (card) {
@@ -39,7 +40,12 @@ var playGame = function (game_state, bet) {
             bet(0);
         });
     } else {
-        placeBet(1, game_state, bet);
+        if( myHand[0].rank === myHand[1].rank){
+            raise(4, game_state, bet);
+        } else {
+            placeBet(1, game_state, bet);
+        }
+
     }
 
 
@@ -48,19 +54,24 @@ var playGame = function (game_state, bet) {
 var placeBet = function (handRank, game_state, bet) {
     if (handRank == 0 ) {
         bet(0);
-    } else if (handRank >= 1 && handRank <= 5) {
-        call(game_state, bet);
+    } else if (handRank >= 1 && handRank <= 4) {
+        call(handRank, game_state, bet);
     } else {
-        raise(game_state, bet);
+        raise(handRank, game_state, bet);
     }
 };
 
-var call = function (game_state, bet) {
+var call = function (handRank, game_state, bet) {
     return bet(game_state.current_buy_in - game_state.players[game_state.in_action].bet);
 };
 
-var raise = function raise(game_state, bet) {
-    return bet(game_state.current_buy_in - game_state.players[game_state.in_action].bet + game_state.minimum_raise + 200);
+var raise = function raise(handRank, game_state, bet) {
+    console.log(" my stack: " + me.stack);
+    var amountToCall = game_state.current_buy_in - game_state.players[game_state.in_action].bet,
+        minRaise = game_state.minimum_raise,
+        amountToRaise = Math.floor( (me.stack - amountToCall - minRaise) * ((handRank + 2) / 10));
+    console.log(" amountToRaise: " + amountToRaise);
+    return bet(amountToCall + minRaise + amountToRaise);
 };
 
 
@@ -69,9 +80,6 @@ module.exports = {
     VERSION: "V1",
 
     bet_request: function (game_state, bet) {
-        if (game_state)
-            console.log(JSON.stringify(game_state));
-
         playGame(game_state, bet);
     },
 
