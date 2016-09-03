@@ -21,6 +21,7 @@ var extractHandFromGame = function (game_state) {
 
 var playGame = function (game_state, bet) {
     var myHand = extractHandFromGame(game_state);
+    var t0 = new Date().getTime();
     if(myHand.length >= 5) {
         var request = http.get("http://rainman.leanpoker.org/rank?cards=" + JSON.stringify(myHand), function (response) {
             var body = '';
@@ -28,8 +29,8 @@ var playGame = function (game_state, bet) {
                 body += d;
             });
             response.on('end', function () {
+                console.log(new Date().getTime() - t0);
                 var data = JSON.parse(body);
-                console.log(body);
                 placeBet(data.rank, game_state, bet);
             });
         });
